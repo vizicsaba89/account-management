@@ -1,0 +1,11 @@
+services:
+  postgres:
+    image: postgres:15.0-alpine
+    hostname: postgres
+    ports:
+      - 5432:5432
+    restart: always
+    environment:
+      POSTGRES_DB: accountdb
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin

@@ -1,0 +1,2 @@
+INSERT INTO accounts (account_number, account_holder_name, account_state) VALUES (123456789123456789123456, 'Teszt Bela', 'ACTIVE') ON CONFLICT DO NOTHING;
+INSERT INTO accounts (account_number, account_holder_name, account_state) VALUES (123456789123456789123457, 'Kiss Pista', 'DELETED') ON CONFLICT DO NOTHING;

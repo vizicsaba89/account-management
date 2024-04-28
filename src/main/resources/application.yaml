@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: account-management
+
+app:
+  bankIdentifier: 12345678
