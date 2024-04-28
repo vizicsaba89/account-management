@@ -25,10 +25,11 @@ class TransactionService(private val accountRepository: AccountRepository, priva
         val account = accountRepository.findByAccountNumber(accountNumber)
 
         return if (account?.accountState == AccountState.ACTIVE) {
-            val balance = transactionRepository.findByAccountNumber(accountNumber)
-                    .map { if (it.type == TransactionType.DEPOSIT) it.amount else -it.amount }
+            val balance = transactionRepository.findByAccountNumberAndTimestampBefore(accountNumber, Timestamp(Date().time))
+                    .map { if (it.type == TransactionType.DEPOSIT) it.amount else it.amount.unaryMinus() }
                     .toList()
                     .sum()
+
             BalanceResponse(balance)
         } else throw RuntimeException("Invalid Account State!")
     }
@@ -43,8 +44,14 @@ class TransactionService(private val accountRepository: AccountRepository, priva
     }
 
     suspend fun createTransaction(transactionRequest: TransactionRequest): TransactionResponse? {
-        return transactionRepository.save(Transaction(null, transactionRequest.accountNumber, TransactionType.DEPOSIT, transactionRequest.amount, Timestamp(Date().time)))
-                .let { TransactionResponse(it.id, it.accountNumber, it.type.name, it.amount, it.timestamp) }
+        return transactionRepository.save(
+                Transaction(
+                        null,
+                        transactionRequest.accountNumber,
+                        TransactionType.valueOf(transactionRequest.type),
+                        transactionRequest.amount,
+                        Timestamp(Date().time)
+                )).let { TransactionResponse(it.id, it.accountNumber, it.type.name, it.amount, it.timestamp) }
     }
 
 }
