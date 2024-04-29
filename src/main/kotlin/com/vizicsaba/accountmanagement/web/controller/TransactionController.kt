@@ -4,9 +4,6 @@ import com.vizicsaba.accountmanagement.service.TransactionService
 import com.vizicsaba.accountmanagement.service.model.transaction.BalanceResponse
 import com.vizicsaba.accountmanagement.service.model.transaction.TransactionRequest
 import com.vizicsaba.accountmanagement.service.model.transaction.TransactionResponse
-import io.swagger.v3.oas.annotations.Operation
-import io.swagger.v3.oas.annotations.responses.ApiResponse
-import io.swagger.v3.oas.annotations.responses.ApiResponses
 import kotlinx.coroutines.flow.Flow
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -15,12 +12,6 @@ import java.math.BigDecimal
 @RestController
 class TransactionController(private val transactionService: TransactionService) {
 
-    @Operation(summary = "Returns all accounts", description = "Returns 200 if successful")
-    @ApiResponses(
-        value = [
-            ApiResponse(responseCode = "200", description = "Successful operation"),
-        ]
-    )
     @GetMapping("/accounts/{accountNumber}/balance")
     suspend fun getCurrentBalanceByAccountNumber(@PathVariable accountNumber: BigDecimal): ResponseEntity<BalanceResponse> {
         val balanceResponse = transactionService.getCurrentBalance(accountNumber)
@@ -28,12 +19,6 @@ class TransactionController(private val transactionService: TransactionService) 
         return ResponseEntity.ok(balanceResponse)
     }
 
-    @Operation(summary = "Returns all accounts", description = "Returns 200 if successful")
-    @ApiResponses(
-        value = [
-            ApiResponse(responseCode = "200", description = "Successful operation"),
-        ]
-    )
     @GetMapping("/accounts/{accountNumber}/transactions")
     suspend fun getTransactions(@PathVariable accountNumber: BigDecimal): ResponseEntity<Flow<TransactionResponse>> {
         val transactionResponse = transactionService.getTransactions(accountNumber)
@@ -41,12 +26,6 @@ class TransactionController(private val transactionService: TransactionService) 
         return ResponseEntity.ok(transactionResponse)
     }
 
-    @Operation(summary = "Returns all accounts", description = "Returns 200 if successful")
-    @ApiResponses(
-        value = [
-            ApiResponse(responseCode = "200", description = "Successful operation"),
-        ]
-    )
     @PostMapping("/accounts/{accountNumber}/transactions")
     suspend fun createTransaction(@PathVariable accountNumber: BigDecimal, @RequestBody transactionRequest: TransactionRequest): ResponseEntity<TransactionResponse> {
         val transactionResponse = transactionService.createTransaction(transactionRequest)

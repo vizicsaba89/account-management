@@ -19,5 +19,6 @@ data class Account(
 
 enum class AccountState {
     ACTIVE,
+    PRECHECK,
     DELETED
 }

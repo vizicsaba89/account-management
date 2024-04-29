@@ -1,6 +1,10 @@
 spring:
   application:
     name: account-management
-
+springdoc:
+  swagger-ui:
+    path: "/swagger.html"
 app:
   bankIdentifier: 12345678
+  backGroundSecurityCheckUrl: http://localhost:9095/background-security-check
+  callbackUrl: http://localhost:8080/accounts/continue
