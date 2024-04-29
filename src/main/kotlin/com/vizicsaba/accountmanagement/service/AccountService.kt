@@ -19,11 +19,11 @@ import java.util.concurrent.ThreadLocalRandom
 @Service
 class AccountService(private val accountRepository: AccountRepository, private val backGroundSecurityCheckService: BackGroundSecurityCheckService, private val appConfiguration: AppConfiguration) {
     suspend fun findByAccountNumber(accountNumber: BigDecimal): AccountResponse? =
-            accountRepository.findByAccountNumber(accountNumber)?.let { AccountResponse(it.accountNumber, it.accountHolderName) }
+            accountRepository.findByAccountNumber(accountNumber)?.let { AccountResponse(it.accountNumber, it.accountHolderName, it.accountState.name) }
 
     suspend fun performBackGroundSecurityCheck(accountRequest: AccountRequest) {
         val account = accountRepository.save(Account(getAccountNumber(), accountRequest.accountHolderName, AccountState.PRECHECK))
-                .let { AccountResponse(it.accountNumber, it.accountHolderName) }
+                .let { AccountResponse(it.accountNumber, it.accountHolderName, it.accountState.name) }
 
         backGroundSecurityCheckService.getBackGroundSecurityCheckResult(BackGroundSecurityCheckRequest(account.accountNumber, account.accountHolderName, appConfiguration.callbackUrl))
     }
@@ -37,7 +37,7 @@ class AccountService(private val accountRepository: AccountRepository, private v
         accountRepository.updateAccountState(accountNumber)
 
         return accountRepository.findByAccountNumber(accountNumber)
-                .let { it?.let { it1 -> AccountResponse(it1.accountNumber, it.accountHolderName) } }
+                .let { it?.let { it1 -> AccountResponse(it1.accountNumber, it.accountHolderName, it.accountState.name) } }
     }
 
     suspend fun deleteAccount(accountNumber: BigDecimal): Unit? =
@@ -45,7 +45,7 @@ class AccountService(private val accountRepository: AccountRepository, private v
 
     suspend fun findAllActiveAccounts() = accountRepository.findAll()
             .filter { it.accountState != AccountState.DELETED }
-            .map { AccountResponse(it.accountNumber, it.accountHolderName) }
+            .map { AccountResponse(it.accountNumber, it.accountHolderName, it.accountState.name) }
 
     private fun getAccountNumber(): BigDecimal {
         val bankIdentifier: Long = appConfiguration.bankIdentifier

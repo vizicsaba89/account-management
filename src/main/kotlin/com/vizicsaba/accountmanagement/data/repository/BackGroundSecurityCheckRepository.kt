@@ -8,12 +8,12 @@ import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.awaitBody
 
 @Repository
-class BackGroundSecurityCheckRepository(private val webClient: WebClient,val appConfiguration: AppConfiguration) {
+class BackGroundSecurityCheckRepository(private val webClient: WebClient, val appConfiguration: AppConfiguration) {
 
     suspend fun getBackGroundSecurityCheckResult(backGroundSecurityCheckRequest: BackGroundSecurityCheckRequest): BackGroundSecurityCheckResponse =
             webClient.post()
                     .uri(appConfiguration.backGroundSecurityCheckUrl)
                     .bodyValue(backGroundSecurityCheckRequest)
                     .retrieve()
-                    .awaitBody()
+                    .awaitBody<BackGroundSecurityCheckResponse>()
 }
