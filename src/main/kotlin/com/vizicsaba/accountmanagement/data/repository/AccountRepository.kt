@@ -1,6 +1,6 @@
 package com.vizicsaba.accountmanagement.data.repository
 
-import com.vizicsaba.accountmanagement.data.model.Account
+import com.vizicsaba.accountmanagement.data.model.account.Account
 import org.springframework.data.repository.kotlin.CoroutineCrudRepository
 import java.math.BigDecimal
 

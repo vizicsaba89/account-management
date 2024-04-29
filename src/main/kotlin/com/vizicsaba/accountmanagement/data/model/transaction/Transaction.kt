@@ -1,4 +1,4 @@
-package com.vizicsaba.accountmanagement.data.model
+package com.vizicsaba.accountmanagement.data.model.transaction
 
 import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Column

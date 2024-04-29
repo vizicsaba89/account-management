@@ -1,13 +1,14 @@
 package com.vizicsaba.accountmanagement.service
 
-import com.vizicsaba.accountmanagement.data.model.AccountState
-import com.vizicsaba.accountmanagement.data.model.Transaction
-import com.vizicsaba.accountmanagement.data.model.TransactionType
+import com.vizicsaba.accountmanagement.data.model.account.AccountState
+import com.vizicsaba.accountmanagement.data.model.transaction.Transaction
+import com.vizicsaba.accountmanagement.data.model.transaction.TransactionType
 import com.vizicsaba.accountmanagement.data.repository.AccountRepository
 import com.vizicsaba.accountmanagement.data.repository.TransactionRepository
-import com.vizicsaba.accountmanagement.service.model.BalanceResponse
-import com.vizicsaba.accountmanagement.service.model.TransactionRequest
-import com.vizicsaba.accountmanagement.service.model.TransactionResponse
+import com.vizicsaba.accountmanagement.service.exception.InvalidAccountException
+import com.vizicsaba.accountmanagement.service.model.transaction.BalanceResponse
+import com.vizicsaba.accountmanagement.service.model.transaction.TransactionRequest
+import com.vizicsaba.accountmanagement.service.model.transaction.TransactionResponse
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
@@ -31,7 +32,7 @@ class TransactionService(private val accountRepository: AccountRepository, priva
                     .sum()
 
             BalanceResponse(balance)
-        } else throw RuntimeException("Invalid Account State!")
+        } else throw InvalidAccountException("Invalid Account State!")
     }
 
     suspend fun getTransactions(accountNumber: BigDecimal): Flow<TransactionResponse> {
@@ -51,7 +52,8 @@ class TransactionService(private val accountRepository: AccountRepository, priva
                         TransactionType.valueOf(transactionRequest.type),
                         transactionRequest.amount,
                         Timestamp(Date().time)
-                )).let { TransactionResponse(it.id, it.accountNumber, it.type.name, it.amount, it.timestamp) }
+                )
+        ).let { TransactionResponse(it.id, it.accountNumber, it.type.name, it.amount, it.timestamp) }
     }
 
 }

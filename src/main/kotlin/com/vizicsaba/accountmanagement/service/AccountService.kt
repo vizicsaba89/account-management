@@ -1,11 +1,11 @@
 package com.vizicsaba.accountmanagement.service
 
 import com.vizicsaba.accountmanagement.configuration.AppConfiguration
-import com.vizicsaba.accountmanagement.data.model.Account
-import com.vizicsaba.accountmanagement.data.model.AccountState
+import com.vizicsaba.accountmanagement.data.model.account.Account
+import com.vizicsaba.accountmanagement.data.model.account.AccountState
 import com.vizicsaba.accountmanagement.data.repository.AccountRepository
-import com.vizicsaba.accountmanagement.service.model.AccountRequest
-import com.vizicsaba.accountmanagement.service.model.AccountResponse
+import com.vizicsaba.accountmanagement.service.model.account.AccountRequest
+import com.vizicsaba.accountmanagement.service.model.account.AccountResponse
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import org.springframework.r2dbc.core.DatabaseClient
